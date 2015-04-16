@@ -114,8 +114,6 @@ NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'pentie/vimrepress'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle "scrooloose/syntastic"
-"GitHub以外のGitリポジトリにあるプラグインを利用する
-NeoBundle 'git://git.wincent.com/command-t.git'
 "MarkdownファイルをブラウザでPreviewする
 NeoBundle 'tukiyo/previm'
 " NeoBundle 'kannokanno/previm'
@@ -237,23 +235,3 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-
-cnoremap <C-a> <Home>
-" 一文字戻る
-cnoremap <C-b> <Left>
-" カーソルの下の文字を削除
-cnoremap <C-d> <Del>
-" 行末へ移動
-cnoremap <C-e> <End>
-" 一文字進む
-cnoremap <C-f> <Right>
-" コマンドライン履歴を一つ進む
-cnoremap <C-n> <Down>
-" コマンドライン履歴を一つ戻る
-cnoremap <C-p> <Up>
-" 前の単語へ移動
-cnoremap <M-b> <S-Left>
-" 次の単語へ移動
-cnoremap <M-f> <S-Right>
-set wildmode=longest:full,full
