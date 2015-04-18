@@ -1,237 +1,180 @@
-""" General
- " vi非互換モード
-set nocompatible
-set history=500
- " .swapファイルを作らない
-set noswapfile
- " バックアップファイルを作らない
-set nowritebackup
- " バックアップをしない
-set nobackup
- " バックスペースで各種消せるようにする
-set backspace=indent,eol,start
- " ビジュアルベルを有効化
-set visualbell
- " clipboradとyankを同期
-set clipboard+=unnamed
-set clipboard+=autoselect
- " serch highlight を消す
-nnoremap <Esc><Esc> :<C-u>set nohlsearch<Return>
-" 対応括弧に<と>のペアを追加
-set matchpairs& matchpairs+=<:>
-" paste mode
-set paste
+" -----------------------------------------------------------------------------
+"   General
+" -----------------------------------------------------------------------------
+set nocompatible                             " vi非互換モード
+set history=5000                             " vim 実行履歴数
+set noswapfile                               " .swapファイルを作らない
+set backspace=indent,eol,start               " バックスペースで各種消せるようにする
+set visualbell                               " ビジュアルベルを有効化
+set matchpairs& matchpairs+=<:>              " 対応括弧に<と>のペアを追加
+set nopaste                                  " paste mode を無効化
+set enc=utf-8                                " 内部エンコードを utf-8 
+set fenc=utf-8                               " ファイル書き込み時のエンコード
+set fencs=utf-8,iso-2022-jp,enc-jp,cp932     " ファイル読み込み時のエンコード
+set incsearch                                " インクリメンタルサーチを行う
+set scrolloff=5                              " スクロールする時に下が見えるようにする
+set list                                     " タブ文字 CTRL-I で表示  行末に $ 
+set listchars=tab:>-,extends:<,trail:-,eol:< " Listモード 使われる文字を設定する。
+set nobackup                                 " バックアップファイルを作成しない
+set showmatch                                " 対応する括弧を表示
+set matchtime=3                              " 対応する括弧を3秒表示
+set tabstop=4                                " タブを表示するときの幅
+set shiftwidth=4                             " タブを挿入するときの幅
+set expandtab                                " タブを半角スペースとして入力
+" set noexpandtab                              " タブをタブとして扱う(スペースに展開しない)
+" set softtabstop=0                            " タブバックスペースでカーソルが動く幅
+set colorcolumn=80                           " 80文字目に縦線
+set textwidth=0                              " 自動的に改行が入るのを無効化
+set t_Co=256                                 " 文字色を256色に設定
+let g:rehash256 = 1                          
 
-" Search
-set ignorecase
-set smartcase
-set wrapscan
-set hlsearch
-set enc=utf-8
-set fenc=utf-8
-set fencs=utf-8,iso-2022-jp,enc-jp,cp932
-" インクリメンタルサーチを行う
-set incsearch
-" スクロールする時に下が見えるようにする
-set scrolloff=5
 
-" View
-colorscheme desert
-syntax on
-set number
-set title
-set ruler
+" -----------------------------------------------------------------------------
+"   Search
+" -----------------------------------------------------------------------------
+set ignorecase                               " 大文字小文字を区別しない
+set smartcase                                " 小文字で検索すると ignorecase無効
+set wrapscan                                 " ファイル先頭に戻る
+set hlsearch                                 " 対象をハイライト
+nnoremap <Esc><Esc> :<C-u>set nohlsearch<Return>   " serch highlight を消す
 
-" タブ文字を CTRL-I で表示し、行末に $ で表示する。（有効:list/無効:nolist）
-:set list
-" Listモード (訳注: オプション 'list' がオンのとき) に使われる文字を設定する。
-:set listchars=tab:>-,extends:<,trail:-,eol:<
 
-" File system
-set nobackup
-
-" Filetype specific settings
-" Set any other file type specific settings
-" in ~/.vim and ~/.vim/after
-" Type :set runtimepath to see you runtime path.
-filetype plugin indent on
-
-" Other programming staffs
-set showmatch
-set matchtime=3
-
-" タブを表示するときの幅
-set tabstop=4
-" タブを挿入するときの幅
-set shiftwidth=4
-
-set expandtab
-" タブをタブとして扱う(スペースに展開しない)
-" set noexpandtab
-" set softtabstop=0
-
-" ----------------------------------------------------------------------------------------
-"   neobundle
-" ----------------------------------------------------------------------------------------
-
-let g:neobundle_default_git_protocol='git'
+" -----------------------------------------------------------------------------
+"  neobundle
+" -----------------------------------------------------------------------------
 
 if has('vim_starting')
-set runtimepath+=~/.vim/bundle/neobundle.vim/
+  set nocompatible
+  " neobundle をインストールしていない場合は自動インストール
+  if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
+    echo "install neobundle..."
+    " vim からコマンド呼び出しているだけ neobundle.vim のクローン
+    :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
+  endif
+  " runtimepath の追加は必須
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
+call neobundle#begin(expand('~/.vim/bundle'))
+let g:neobundle_default_git_protocol='https'
 
-call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
+
+" vimrc に記述されたプラグインでインストールされていないものがないかチェックする
+NeoBundleCheck
 call neobundle#end()
 
-" Let NeoBundle manage NeoBundle
-NeoBundleFetch 'Shougo/neobundle.vim'
 
-" Recommended to install
-" After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
-NeoBundle 'Shougo/vimproc', {
-        \ 'build' : {
-                \ 'windows' : 'make -f make_mingw32.mak',
-                \ 'cygwin' : 'make -f make_cygwin.mak',
-                \ 'mac' : 'make -f make_mac.mak',
-                \ 'unix' : 'make -f make_unix.mak',
-        \ },
-\ }
+" -----------------------------------------------------------------------------
+"  Color Scheme
+" -----------------------------------------------------------------------------
+NeoBundle 'w0ng/vim-hybrid'                       " colorscheme hybrid
+NeoBundle 'altercation/vim-colors-solarized'      " colorscheme solarized
+NeoBundle 'nanotech/jellybeans.vim'               " colorscheme jellybeans
+NeoBundle 'tomasr/molokai'                        " colorscheme molokai
 
-filetype plugin indent on     " Required!
 
-" Brief help
-" :NeoBundleList          - list configured bundles
-" :NeoBundleInstall(!)    - install(update) bundles
-" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-
-NeoBundle 'thinca/vim-quickrun'
-" 自動補完
-NeoBundle "Shougo/neocomplete.vim"
-" NeoBundle 'davidoc/taskpaper.vim'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'pentie/vimrepress'
-NeoBundle 'tpope/vim-markdown'
-NeoBundle "scrooloose/syntastic"
-"MarkdownファイルをブラウザでPreviewする
-NeoBundle 'tukiyo/previm'
-" NeoBundle 'kannokanno/previm'
-NeoBundle 'tyru/open-browser.vim'
-"vimでgit を使う
-NeoBundle 'tpope/vim-fugitive'
-"Git以外のリポジトリにあるプラグインを利用する
-"NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-"NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
-NeoBundle 'andviro/flake8-vim'
-let g:syntastic_python_checkers = ['pyflakes', 'pep8']
-NeoBundle 'vim-scripts/rdark'
-" solarized カラースキーム
-NeoBundle 'altercation/vim-colors-solarized'
-" mustang カラースキーム
-NeoBundle 'croaker/mustang-vim'
-" wombat カラースキーム
-NeoBundle 'jeffreyiacono/vim-colors-wombat'
-" jellybeans カラースキーム
-NeoBundle 'nanotech/jellybeans.vim'
-" lucius カラースキーム
-NeoBundle 'vim-scripts/Lucius'
-" zenburn カラースキーム
-NeoBundle 'vim-scripts/Zenburn'
-" mrkn256 カラースキーム
-NeoBundle 'mrkn/mrkn256.vim'
-" railscasts カラースキーム
-NeoBundle 'jpo/vim-railscasts-theme'
-" pyte カラースキーム
-NeoBundle 'therubymug/vim-pyte'
-" molokai カラースキーム
-NeoBundle 'tomasr/molokai'
-" hybryd カラースキーム
-NeoBundle 'w0ng/vim-hybrid'
-" カラースキーム一覧表示に Unite.vim を使う
+" -----------------------------------------------------------------------------
+"  Unite
+" -----------------------------------------------------------------------------
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'ujihisa/unite-colorscheme'
-" filer nerd-tree
-NeoBundle 'scrooloose/nerdtree'
 
-" Installation check.
-NeoBundleCheck
 
-au BufRead,BufNewFile *.md  set filetype=markdown
-
-set colorcolumn=80
-" 自動的に改行が入るのを無効化
-set textwidth=0
-
-" Previm config
-nnoremap <silent><C-o> :PrevimOpen<CR>
-" NERD-tree config
+" -----------------------------------------------------------------------------
+"  NERD-tree  
+" -----------------------------------------------------------------------------
+NeoBundle "scrooloose/nerdtree"
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
 
-" neocomplete config
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-            \ 'default' : '',
-            \ 'vimshell' : $HOME.'/.vimshell_hist',
-            \ 'scheme' : $HOME.'/.gosh_completions'
-            \ }
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
+
+" -----------------------------------------------------------------------------
+"  Neocomplete
+" -----------------------------------------------------------------------------
+
+if has('lua')
+  NeoBundleLazy 'Shougo/neocomplete.vim', {
+    \ 'depends' : 'Shougo/vimproc',
+    \ 'autoload' : { 'insert' : 1,}
+    \ }
 endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
+let g:neocomplete#enable_at_startup               = 1
+let g:neocomplete#auto_completion_start_length    = 3
+let g:neocomplete#enable_ignore_case              = 1
+let g:neocomplete#enable_smart_case               = 1
+let g:neocomplete#enable_camel_case               = 1
+let g:neocomplete#use_vimproc                     = 1
+let g:neocomplete#sources#buffer#cache_limit_size = 1000000
+let g:neocomplete#sources#tags#cache_limit_size   = 30000000
+let g:neocomplete#enable_fuzzy_completion         = 1
+let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
 
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return neocomplete#close_popup() . "\<CR>"
-    " For no inserting <CR> key.
-    "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
-" For cursor moving in insert mode(Not recommended)
-"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-" Or set this.
-"let g:neocomplete#enable_cursor_hold_i = 1
-" Or set this.
-"let g:neocomplete#enable_insert_char_pre = 1
+" --------------------------------------------------------------------
+"  Python Setting
+" --------------------------------------------------------------------
 
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
+" sytastic: syntax check plugin
+NeoBundle 'scrooloose/syntastic'
+let g:syntastic_python_checkers = ["flake8"]
 
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+" jedi-vim: Python用補完plugin
+NeoBundleLazy "davidhalter/jedi-vim", {
+  \ "autoload": {
+  \   "filetypes": ["python", "python3", "djangohtml"],
+  \ },
+  \ "build" : {
+  \   "mac"  : "pip install jedi",
+  \   "unix" : "pip install jedi",
+  \ }}
+let g:jedi#rename_command = '<Leader>R'
+let g:jedi#goto_assignments_command = '<Leader>G'
+autocmd FileType python setlocal omnifunc=jedi#completions
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
 
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" vim-flake8: Error一覧を画面下部に表示
+NeoBundleLazy "nvie/vim-flake8", {
+      \ "autoload": {
+      \   "filetypes": ["python", "python3", "djangohtml"]
+      \ }}
+" buffer保存時に flake8 を実行
+autocmd BufWritePost *.py call Flake8()
+
+
+" --------------------------------------------------------------------
+"   View 
+" --------------------------------------------------------------------
+set showmatch    " 括弧の対応をハイライト
+set showcmd      " 入力中のコマンドを表示
+set showmode     " 現在のモードを表示
+set number       " 行番号表示
+set list         " 不可視文字表示
+set notitle      " タイトル書き換えない
+set scrolloff=5  " 行送り
+set number       " 行番号を表示
+set title        " タイトルを表示
+set ruler        " カーソル位置を表示
+
+" --------------------------------------------------------------------
+"   Color Sheme 
+" --------------------------------------------------------------------
+"" hybrid
+let g:hybrid_use_Xresources = 1                    " hybrid用の色設定を読み込み
+hi CursorLineNr ctermbg=4 ctermfg=0                " カーソル行の行番号色を変更
+set cursorline                                     " カーソル行をハイライト
+hi clear CursorLine                                " カーソル行の色を変更
+autocmd ColorScheme * highlight LineNr ctermfg=239 " 番号色を変更
+colorscheme hybrid                                 " カラースキーマを hybrid に設定
+filetype plugin indent on                          " ファイルタイプ毎に固有の設定を有効化
+syntax enable                                      " ハイライトを有効化
+
+
+" --------------------------------------------------------------------
+"  File Type
+" --------------------------------------------------------------------
+" .md を ファイルタイプ markdown  として扱う
+au BufRead,BufNewFile *.md  set filetype=markdown
+
+
+
