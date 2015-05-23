@@ -108,6 +108,11 @@ let g:neocomplete#sources#tags#cache_limit_size   = 30000000
 let g:neocomplete#enable_fuzzy_completion         = 1
 let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
 
+" --------------------------------------------------------------------
+"  Coffee Setting
+" --------------------------------------------------------------------
+
+Bundle 'kchmck/vim-coffee-script'
 
 " --------------------------------------------------------------------
 "  Python Setting
