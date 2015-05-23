@@ -61,7 +61,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " vimrc に記述されたプラグインでインストールされていないものがないかチェックする
 NeoBundleCheck
-call neobundle#end()
 
 
 " -----------------------------------------------------------------------------
@@ -139,9 +138,10 @@ NeoBundleLazy "nvie/vim-flake8", {
       \   "filetypes": ["python", "python3", "djangohtml"]
       \ }}
 " buffer保存時に flake8 を実行
-autocmd BufWritePost *.py call Flake8()
+" autocmd BufWritePost *.py call Flake8()
 
 
+call neobundle#end()
 " --------------------------------------------------------------------
 "   View 
 " --------------------------------------------------------------------
@@ -175,6 +175,3 @@ syntax enable                                      " ハイライトを有効化
 " --------------------------------------------------------------------
 " .md を ファイルタイプ markdown  として扱う
 au BufRead,BufNewFile *.md  set filetype=markdown
-
-
-
