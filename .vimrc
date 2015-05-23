@@ -112,7 +112,7 @@ let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
 "  Coffee Setting
 " --------------------------------------------------------------------
 
-Bundle 'kchmck/vim-coffee-script'
+NoeBundle 'kchmck/vim-coffee-script'
 
 " --------------------------------------------------------------------
 "  Python Setting
